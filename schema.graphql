@@ -1,0 +1,52 @@
+type User {
+  id: ID!
+  username: String
+  email: String
+  favorites: [Favorite]
+}
+
+type Player {
+  id: ID!
+  name: String
+}
+
+type Favorite {
+  id: ID!
+  user: User!
+  player: Player!
+}
+
+type Query {
+  users: [User!]!
+  user(id: ID!): User!
+}
+
+type Mutation {
+  createUser(
+    username: String!
+    email: String!
+    password: String!
+  ): CreateUserResponse!
+  login(email: String!, password: String!): LoginResponse!
+  createFavorite(userId: ID!, playerId: ID!): CreateFavoriteResponse!
+  deleteFavorite(id: ID!): DeleteFavoriteResponse!
+}
+
+type CreateUserResponse {
+  user: User
+  errors: [String!]!
+}
+
+type LoginResponse {
+  token: String!
+}
+
+type CreateFavoriteResponse {
+  favorite: Favorite
+  errors: [String!]!
+}
+
+type DeleteFavoriteResponse {
+  success: Boolean!
+  errors: [String!]!
+}
