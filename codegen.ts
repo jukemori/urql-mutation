@@ -5,12 +5,9 @@ const config: CodegenConfig = {
   documents: ["./**/*.tsx", "./**/*.ts"],
   ignoreNoDocuments: true,
   generates: {
-    "./gql/generated/": {
+    "./gql/": {
       preset: "client",
       plugins: [],
-      presetConfig: {
-        fragmentMasking: { unmaskFunctionName: "getFragment" },
-      },
     },
   },
 };

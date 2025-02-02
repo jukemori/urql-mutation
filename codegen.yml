@@ -1,0 +1,7 @@
+schema: schema.graphql
+documents: ["app/**/*.tsx", "gql/**/*.ts"]
+generates:
+  gql/:
+    preset: client
+    config:
+      useTypeImports: true
