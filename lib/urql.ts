@@ -1,23 +1,29 @@
+import { useMemo } from "react";
 import {
   createClient,
   cacheExchange,
   fetchExchange,
   ssrExchange,
-} from "@urql/core";
-import { registerUrql } from "@urql/next/rsc";
+} from "@urql/next";
 
-export const ssr = ssrExchange();
-
-const makeClient = () => {
-  return createClient({
-    url: "http://localhost:3000/graphql",
-    exchanges: [cacheExchange, ssr, fetchExchange],
-    fetchOptions: {
-      headers: {
-        "Content-Type": "application/json",
+export function useUrqlClient() {
+  const [client, ssr] = useMemo(() => {
+    const isClient = typeof window !== "undefined";
+    const ssr = ssrExchange({ isClient });
+    const client = createClient({
+      url: "http://localhost:3001/graphql",
+      exchanges: [cacheExchange, ssr, fetchExchange],
+      suspense: !isClient,
+      fetchOptions: {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        },
       },
-    },
-  });
-};
+    });
 
-export const { getClient } = registerUrql(makeClient);
+    return [client, ssr];
+  }, []);
+
+  return { client, ssr };
+}
